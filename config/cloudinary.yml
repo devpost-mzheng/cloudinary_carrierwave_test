@@ -1,0 +1,29 @@
+---
+development:
+  cloud_name: test
+  api_key: 'test'
+  api_secret: test
+  enhance_image_tag: false
+  static_image_support: false
+  secure: true
+staging:
+  cloud_name: test
+  api_key: 'test'
+  api_secret: test
+  enhance_image_tag: false
+  static_image_support: true
+  secure: true
+production:
+  cloud_name: test
+  api_key: 'test'
+  api_secret: test
+  enhance_image_tag: false
+  static_image_support: true
+  secure: true
+test:
+  cloud_name: test
+  api_key: 'test'
+  api_secret: test
+  enhance_image_tag: false
+  static_image_support: false
+  secure: true

@@ -14,40 +14,41 @@ class CompaniesController < ApplicationController
 
   # GET /companies/new
   def new
-    @company = Company.new
+    @company_form = CompanyForm.new(Company.new)
   end
 
-  # GET /companies/1/edit
   def edit
+    @company_form = CompanyForm.new(@company)
   end
 
-  # POST /companies
-  # POST /companies.json
   def create
-    @company = Company.new(company_params)
+    @company_form = CompanyForm.new(Company.new)
 
-    respond_to do |format|
-      if @company.save
-        format.html { redirect_to @company, notice: 'Company was successfully created.' }
-        format.json { render :show, status: :created, location: @company }
-      else
-        format.html { render :new }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
-      end
+    if @company_form.validate(company_params)
+      @company_form.save
+
+      redirect_to companies_url
+    else
+      render "new"
     end
   end
 
-  # PATCH/PUT /companies/1
-  # PATCH/PUT /companies/1.json
   def update
-    respond_to do |format|
-      if @company.update(company_params)
-        format.html { redirect_to @company, notice: 'Company was successfully updated.' }
-        format.json { render :show, status: :ok, location: @company }
-      else
-        format.html { render :edit }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
-      end
+    @company_form = CompanyForm.new(@company)
+
+    # this will delete the logo from cloudinary but keep it on the model if there wasn't a new one uploaded
+    # you can reproduce this behavior without the controller by just saving a company as follows:
+    #
+    # company = Company.last
+    # company.logo = company.logo
+    # company.save
+    #
+    if @company_form.validate(company_params)
+      @company_form.save
+
+      redirect_to company_url(@company)
+    else
+      render "edit"
     end
   end
 
@@ -69,6 +70,6 @@ class CompaniesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def company_params
-      params.require(:company).permit(:logo)
+      params.require(:company).permit(:name, :logo)
     end
 end
